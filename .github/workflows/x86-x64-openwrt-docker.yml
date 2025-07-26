@@ -40,6 +40,19 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Initialization Environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        echo -e "Total CPU cores\t: $(nproc)"
+        cat /proc/cpuinfo | grep 'model name'
+        free -h
+        uname -a
+        [ -f /proc/version ] && cat /proc/version
+        [ -f /etc/issue.net ] && cat /etc/issue.net
+        [ -f /etc/issue ] && cat /etc/issue
+        ulimit -a
+        
     - name: Clone Source Code
       run: |
         df -hT $PWD
@@ -135,6 +148,8 @@ jobs:
         cp ../scripts/init-settings.sh files/etc/uci-defaults/99-init-settings
         mkdir -p files/etc/opkg
         cp ../configs/opkg/distfeeds-packages-server.conf files/etc/opkg/distfeeds.conf.server
+        mkdir -p files/etc/opkg/keys
+        cp ../configs/opkg/1035ac73cc4e59e3 files/etc/opkg/keys/1035ac73cc4e59e3
         if "$KMODS_IN_FIRMWARE" = 'true'
         then
             mkdir -p files/www/snapshots

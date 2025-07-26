@@ -18,6 +18,15 @@ rm -rf ../../customfeeds/luci/applications/luci-app-kodexplorer
 rm -rf openwrt-package/verysync
 rm -rf openwrt-package/luci-app-verysync
 
+# Add Lienol's Packages
+git clone --depth=1 https://github.com/Lienol/openwrt-package
+rm -rf ../../customfeeds/luci/applications/luci-app-kodexplorer
+rm -rf openwrt-package/verysync
+rm -rf openwrt-package/luci-app-verysync
+
+# apppppppp
+git clone --depth=1 https://github.com/DHDAXCW/dhdaxcw-app
+
 # Add luci-app-ssr-plus
 git clone --depth=1 https://github.com/fw876/helloworld
 
@@ -39,13 +48,20 @@ cp -f $GITHUB_WORKSPACE/data/bg1.jpg luci-theme-argon/htdocs/luci-static/argon/i
 git clone https://github.com/DHDAXCW/theme
 
 # Add luci-app-lucky
-git clone --depth=1 https://github.com/gdy666/luci-app-lucky
+git clone --depth=1 -b 2.13.4 https://github.com/DHDAXCW/luci-app-lucky
+rm -rf ../../customfeeds/packages/net/lucky
 
 # alist
-git clone --depth=1 https://github.com/sbwml/luci-app-alist
+git clone -b lua --depth=1 https://github.com/sbwml/luci-app-alist
 
 # Add OpenAppFilter
 git clone --depth=1 https://github.com/destan19/OpenAppFilter
+
+# qbittorrent
+rm -rf ../../customfeeds/packages/net/qBittorrent
+rm -rf ../../customfeeds/packages/libs/rblibtorrent
+git clone --depth=1 https://github.com/sbwml/luci-app-qbittorrent
+rm -rf luci-app-qbittorrent/luci-app-qbittorrent
 
 popd
  
@@ -60,6 +76,10 @@ popd
 
 
 rm -rf nas-packages-luci/luci/luci-app-istorex
+rm -rf feeds/packages/lang/golang
+git clone https://github.com/sbwml/packages_lang_golang -b 23.x feeds/packages/lang/golang
+rm -rf package/feeds/packages/apk
+rm -rf package/feeds/packages/adguardhome
 
 # Change default shell to zsh
 sed -i 's/\/bin\/ash/\/usr\/bin\/zsh/g' package/base-files/files/etc/passwd
