@@ -41,6 +41,7 @@ jobs:
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean ) &
         sudo timedatectl set-timezone "$TZ"
+        udo ln -sf /usr/bin/genisoimage /usr/bin/mkisofs
         
     - name: Initialize Environment and Display System Info
       env:
