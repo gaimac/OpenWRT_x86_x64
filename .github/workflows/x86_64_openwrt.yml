@@ -11,7 +11,7 @@ env:
   DIY_P2_SH: immortalwrt/diy-part2.sh
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
-  TZ: Asia/Shanghai
+  TZ: Asia/Taipei
   OPENWRT_NAME: immortalwrt
   OPENWRT_NAME1: x86_64
 
