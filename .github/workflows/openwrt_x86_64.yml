@@ -48,7 +48,7 @@ jobs:
         DEBIAN_FRONTEND: noninteractive
       run: |
         chmod +x $OPENWRT_NAME/*.sh
-        mkdir -p $GITHUB_WORKSPACE/$OPENWRT_NAME/system
+        #$GITHUB_WORKSPACE/$OPENWRT_NAME/system
         $GITHUB_WORKSPACE/$OPENWRT_NAME/system-Information.sh
         
     - name: Install Go 1.25
