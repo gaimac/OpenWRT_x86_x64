@@ -43,10 +43,6 @@ jobs:
         sudo timedatectl set-timezone "$TZ"
         sudo ln -sf /usr/bin/genisoimage /usr/bin/mkisofs
         
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
-      if: success() || failure()
-    
     - name: Initialize Environment and Display System Info
       env:
         DEBIAN_FRONTEND: noninteractive
@@ -54,7 +50,11 @@ jobs:
         chmod +x $OPENWRT_NAME/*.sh
         #$GITHUB_WORKSPACE/$OPENWRT_NAME/system
         $GITHUB_WORKSPACE/$OPENWRT_NAME/system-Information.sh
-        
+            
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+      if: success() || failure()
+      
     - name: Install Go 1.25
       uses: actions/setup-go@v5
       with:
