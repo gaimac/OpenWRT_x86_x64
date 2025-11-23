@@ -43,6 +43,10 @@ jobs:
         sudo timedatectl set-timezone "$TZ"
         sudo ln -sf /usr/bin/genisoimage /usr/bin/mkisofs
         
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+      if: success() || failure()
+    
     - name: Initialize Environment and Display System Info
       env:
         DEBIAN_FRONTEND: noninteractive
