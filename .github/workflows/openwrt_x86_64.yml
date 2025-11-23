@@ -46,13 +46,14 @@ jobs:
     - name: Initialize Environment and Display System Info
       env:
         DEBIAN_FRONTEND: noninteractive
-      run: |
+      run: |        
         chmod +x $OPENWRT_NAME/*.sh
         #$GITHUB_WORKSPACE/$OPENWRT_NAME/system
         $GITHUB_WORKSPACE/$OPENWRT_NAME/system-Information.sh
       
     - name: Download firmware source code
       run: |
+        sudo rm -rf openwrt
         git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
 
     - name: Update feeds
