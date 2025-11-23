@@ -50,15 +50,7 @@ jobs:
         chmod +x $OPENWRT_NAME/*.sh
         #$GITHUB_WORKSPACE/$OPENWRT_NAME/system
         $GITHUB_WORKSPACE/$OPENWRT_NAME/system-Information.sh
-            
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
-      if: success() || failure()
       
-    - name: Install Go 1.25
-      uses: actions/setup-go@v5
-      with:
-        go-version: '1.25'    
     - name: Download firmware source code
       run: |
         git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
@@ -73,7 +65,12 @@ jobs:
         git clone --depth=1 https://github.com/coolsnowwolf/luci customfeeds/luci
         chmod +x ../scripts/*.sh
         ../scripts/hook-feeds.sh
-
+        
+    - name: Install Go 1.25
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.25'    
+        
     - name: Install feeds
       run: |
         cd openwrt
