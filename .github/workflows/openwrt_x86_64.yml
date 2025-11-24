@@ -39,7 +39,7 @@ jobs:
         sudo -E apt-get -qq purge azure-cli ghc* zulu* hhvm llvm* firefox powershell openjdk* dotnet* google* mysql* php* android* rename speedtest-cli
         sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
         sudo -E apt-get -qq autoremove --purge
-        sudo -E apt-get -qq clean ) &
+        sudo -E apt-get -qq clean )
         sudo timedatectl set-timezone "$TZ"
         sudo ln -sf /usr/bin/genisoimage /usr/bin/mkisofs
         
@@ -53,7 +53,6 @@ jobs:
       
     - name: Download firmware source code
       run: |
-        sudo rm -rf openwrt
         git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
 
     - name: Update feeds
@@ -72,16 +71,38 @@ jobs:
       with:
         go-version: '1.25'    
         
-    - name: Install feeds
-      run: |
-        cd openwrt
-        ./scripts/feeds install -a
-        
     - name: Override Go feed
       run: |
         cd openwrt
         rm -rf feeds/packages/lang/golang
-        git clone https://github.com/sbwml/packages_lang_golang -b 25.x feeds/packages/lang/golang
+        git clone https://github.com/sbwml/packages_lang_golang -b 25.x feeds/packages/lang/golang        
+
+    - name: Check Go feed version
+      run: |
+        cd openwrt/feeds/packages/lang/golang
+        VERSION=$(grep -E '^PKG_VERSION' Makefile | awk -F'=' '{print $2}' | tr -d '[:space:]')
+        echo "檢測到的 Go 版本: $VERSION"
+        if [[ "$VERSION" == 1.25* ]]; then
+          echo "✅ Go feed 版本正確 (1.25.x)"
+        else
+          echo "❌ Go feed 版本錯誤，期望 1.25.x，實際為 $VERSION"
+          exit 1
+        fi
+        
+    - name: Clean old toolchain
+      run: |
+        cd openwrt
+        echo "🧹 清理舊的編譯暫存與工具鏈..."
+        rm -rf tmp
+        rm -rf staging_dir
+        rm -rf build_dir/target-*
+        rm -rf build_dir/hostpkg
+        echo "✅ 已清理完成，確保使用新的 Go 1.25 工具鏈"
+
+    - name: Install feeds
+      run: |
+        cd openwrt
+        ./scripts/feeds install -a        
         
     - name: Load feeds.conf.default
       run: |
@@ -101,7 +122,10 @@ jobs:
         cd openwrt
         make defconfig
         cat .config
-        make download -j$(nproc)
+        make download -j$(nproc) V=s \
+        DOWNLOAD_TOOL=aria2c \
+        DOWNLOAD_ARGS="--max-tries=5 --timeout=60 --dir=dl --max-concurrent-downloads=5 --split=5 --min-split-size=1M"
+
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
              
