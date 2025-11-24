@@ -81,7 +81,13 @@ jobs:
     - name: Check Go feed version
       run: |
         cd openwrt/feeds/packages/lang/golang
-        VERSION=$(grep -E '^PKG_VERSION' Makefile | awk -F'=' '{print $2}' | tr -d '[:space:]')
+        MAJOR_MINOR=$(grep -E '^GO_VERSION_MAJOR_MINOR' Makefile | awk -F':=' '{print $2}' | tr -d '[:space:]')
+        PATCH=$(grep -E '^GO_VERSION_PATCH' Makefile | awk -F':=' '{print $2}' | tr -d '[:space:]')
+        if [ -n "$PATCH" ]; then
+          VERSION="$MAJOR_MINOR.$PATCH"
+        else
+          VERSION="$MAJOR_MINOR"
+        fi
         echo "檢測到的 Go 版本: $VERSION"
         if [[ "$VERSION" == 1.25* ]]; then
           echo "✅ Go feed 版本正確 (1.25.x)"
