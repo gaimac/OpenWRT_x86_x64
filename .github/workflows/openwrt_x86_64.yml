@@ -81,6 +81,7 @@ jobs:
     - name: Check Go feed version
       run: |
         cd openwrt/feeds/packages/lang/golang
+        ls -l
         MAJOR_MINOR=$(grep -E '^GO_VERSION_MAJOR_MINOR' Makefile | awk -F':=' '{print $2}' | tr -d '[:space:]')
         PATCH=$(grep -E '^GO_VERSION_PATCH' Makefile | awk -F':=' '{print $2}' | tr -d '[:space:]')
         if [ -n "$PATCH" ]; then
