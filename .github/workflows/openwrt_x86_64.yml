@@ -77,7 +77,7 @@ jobs:
         cd openwrt
         ./scripts/feeds install -a
         
-    - name: Install feeds
+    - name: Override Go feed
       run: |
         cd openwrt
         rm -rf feeds/packages/lang/golang
