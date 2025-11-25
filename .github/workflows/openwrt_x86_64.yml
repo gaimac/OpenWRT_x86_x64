@@ -88,7 +88,11 @@ jobs:
         [ -e "$CONFIG_FILE" ] && cat "$CONFIG_FILE" > openwrt/.config
         chmod +x $OPENWRT_NAME/*.sh && cd openwrt
         $GITHUB_WORKSPACE/$DIY_P2_SH
-
+    - name: Start tmate session
+      uses: mxschmitt/action-tmate@v3
+      with:
+        limit-access-to-actor: false
+          
     - name: Download the installation package
       id: package
       run: |
